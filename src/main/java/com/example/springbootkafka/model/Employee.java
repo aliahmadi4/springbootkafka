@@ -14,7 +14,8 @@ public class Employee {
     String name;
     String age;
 
-    public Employee(){}
+    public Employee(){} //necessary for deserialization
+    
     public Employee(String name, String age){
         this.name = name;
         this.age = age;

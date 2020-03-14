@@ -20,6 +20,7 @@ import java.util.Map;
 @Configuration
 public class KafkaConfig {
 
+    //configure kafka, and kafkaTemplate for sending topic of type String
     @Bean
     public ProducerFactory<String, String> stringProducerFactory(){
         Map<String, Object> config = new HashMap<>();
@@ -28,13 +29,13 @@ public class KafkaConfig {
         config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         return new DefaultKafkaProducerFactory(config);
     }
-
     @Bean
     public KafkaTemplate<String, String> stringKafkaTemplate(){
         return new KafkaTemplate<>(stringProducerFactory());
     }
 
 
+    //configure kafka, and kafkaTemplate for sending topic of type Employee
     @Bean
     public ProducerFactory<String, Employee> employeeProducerFactory(){
         Map<String, Object> config = new HashMap<>();
@@ -51,6 +52,7 @@ public class KafkaConfig {
 
 
 
+    //configure kafka, and kafkaListener to consume topic of type String
     @Bean
     public ConsumerFactory<String, String> consumerFactory(){
         Map<String, Object> config = new HashMap<>();
@@ -60,7 +62,6 @@ public class KafkaConfig {
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         return new DefaultKafkaConsumerFactory<>(config);
     }
-
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory(){
         ConcurrentKafkaListenerContainerFactory factory = new ConcurrentKafkaListenerContainerFactory();
@@ -68,6 +69,8 @@ public class KafkaConfig {
         return factory;
     }
 
+
+    //configure kafka, and kafkaListener to receive topic of type Employee
     @Bean
     public ConsumerFactory<String, Employee> employeeConsumerFactory(){
         Map<String, Object> config = new HashMap<>();
@@ -76,9 +79,8 @@ public class KafkaConfig {
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         return new DefaultKafkaConsumerFactory<>(config,
-                new StringDeserializer(), new JsonDeserializer<>(Employee.class));
+                new StringDeserializer(), new JsonDeserializer<>(Employee.class)); //to deserialize json to Employee class
     }
-
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, Employee> employeeKafkaListenerContainerFactory(){
         ConcurrentKafkaListenerContainerFactory<String, Employee> factory = new ConcurrentKafkaListenerContainerFactory<>();
